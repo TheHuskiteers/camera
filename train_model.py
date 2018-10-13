@@ -45,7 +45,9 @@ def take_pictures():
                 cv2.imshow("Frame", normalized_face)
                 key = cv2.waitKey(0) & 0xFF
                 if key == ord('y'):
-                    cv2.imwrite(base_path + '/' + str(pictures_left) + '.png', normalized_face)
+                    img_path = base_path + '/' + str(pictures_left) + '.png'
+                    cv2.imwrite(img_path, normalized_face)
+                    print "Saved: " + img_path
                     pictures_left -= 1
                     time.sleep(1)
             cap.truncate(0)
