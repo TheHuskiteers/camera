@@ -42,7 +42,7 @@ def main():
             cv2.putText(image, 'No Face Detected', (5, 220), font, 1, (255, 0, 0), 2)
 
         # Show the frame
-        cv2.imshow("Frame", image)
+        cv2.imshow("Frame", cv2.resize(image, (576, 416)))
 
         # Exit on ESC
         if cv2.waitKey(1) == 27:
