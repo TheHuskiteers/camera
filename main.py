@@ -49,7 +49,7 @@ def main():
             cv2.putText(image, emotion, (5, 220), font, 1, (0, 255, 0), 2)
             recent_emotions.append(emotion)
             face_count += 1
-            if face_count >= 3:
+            if face_count >= 10:
                 mode = get_mode_emotion(recent_emotions)
                 if last_emotion != mode:
                     last_emotion = mode
