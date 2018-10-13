@@ -41,6 +41,7 @@ def take_pictures():
                 normalized_faces = normalize_faces(gray, faces)
                 cv2.imshow("Image", normalized_faces[0])
                 cv2.waitKey(0)
+                cap.truncate(0)
 
 # Setup camera
 def setup_camera():
