@@ -15,6 +15,9 @@ def main():
     # Init face_cascade
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
+    # Define font to use for text
+    font = cv2.FONT_HERSHEY_SIMPLEX
+
     # Capture frames from camera
     for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
         # Grab raw array representing the image
@@ -30,9 +33,11 @@ def main():
         if len(faces) != 0:
             (x, y, w, h) = faces[0]
             cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
-        
+            cv2.putText(image, 'Face Detected', (5, 220), font, 4, (0, 255, 0), 2, cv2.LINE_AA)
+        else:
+            cv2.putText(image, 'No Face Detected', (5, 220), font, 4, (255, 0, 0), 2, cv2.LINE_AA)
+
         # Show the frame
-        print "Displaying frame"
         cv2.imshow("Frame", image)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
