@@ -62,6 +62,9 @@ def find_faces(image):
     return faces
 
 def normalize_faces(image, faces):
+    # Test
+    [print f[1] for f in faces]
+
     # Cut faces from image
     cutted_faces = [image[f[1]:f[1] + f[3], f[0]:f[0] + f[2]] for f in faces]
 
