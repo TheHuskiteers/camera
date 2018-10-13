@@ -3,20 +3,24 @@ import numpy as np
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
+from multiprocessing import Pool
+
+# Define font to use for text
+font = cv2.FONT_HERSHEY_SIMPLEX
+
+# Init face_cascade
+face_cascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
+
+# Init the fisherface model
+fisher_face = cv2.createFisherFaceRecognizer()
+fisher_face.load('models/emotion_detection_model.xml')
+
+# List of emotions current model is trained for
+emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
 
 def main():
     # Setup camera
-    camera = PiCamera()
-    camera.resolution = (320, 224)
-    camera.framerate = 32
-    cap = PiRGBArray(camera, size=(320, 224))
-    time.sleep(0.1)
-
-    # Define font to use for text
-    font = cv2.FONT_HERSHEY_SIMPLEX
-
-    # List of emotions current model is trained for
-    emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
+    (camera, cap) = setup_camera()
 
     # Capture frames from camera
     for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
@@ -35,9 +39,9 @@ def main():
         # Take the first face and draw a square around it
         if len(faces) != 0:
             (x, y, w, h) = faces[0]
-            emotions_index = get_emotion_from_face(normalized_faces[0])
-            cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
-            cv2.putText(image, emotions[emotions_index], (5, 220), font, 1, (0, 255, 0), 2)
+            emotion = get_emotion_from_face(normalized_faces[0])
+            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            cv2.putText(image, emotion, (5, 220), font, 1, (0, 255, 0), 2)
         else:
             cv2.putText(image, 'No Face Detected', (5, 220), font, 1, (255, 0, 0), 2)
 
@@ -54,10 +58,18 @@ def main():
     # Cleanup windows when done
     cv2.destroyAllWindows()
 
-def find_faces(image):
-    # Init face_cascade
-    face_cascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
+# Setup camera
+def setup_camera():
+    camera = PiCamera()
+    camera.resolution = (320, 224)
+    camera.framerate = 32
+    cap = PiRGBArray(camera, size=(320, 224))
+    time.sleep(0.1)
 
+    return (camera, cap)
+
+
+def find_faces(image):
     # Detect faces in image
     faces = face_cascade.detectMultiScale(image, 1.3, 5)
 
@@ -74,13 +86,8 @@ def normalize_faces(image, faces):
     return normalized_faces
 
 def get_emotion_from_face(face):
-    # Init the fisherface model
-    fisher_face = cv2.createFisherFaceRecognizer()
-    fisher_face.load('models/emotion_detection_model.xml')
+    return emotion[fisher_face.predict(face)[0]]
 
-    prediction = fisher_face.predict(face)
-
-    return prediction[0]
-
+# Execute main() if run
 if __name__ == "__main__":
     main()
