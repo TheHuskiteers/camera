@@ -16,12 +16,14 @@ fisher_face = cv2.createFisherFaceRecognizer()
 fisher_face.load('models/emotion_detection_model.xml')
 
 # List of emotions current model is trained for
-emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
+#emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
+emotions = ['happy', 'angry', 'sadness', 'happy', 'sadness', 'happy']
 
 def main():
     # Setup camera
     (camera, cap) = setup_camera()
 
+    # Count and list for determining mode of recent emotions
     face_count = 0
     recent_emotions = []
 
@@ -47,11 +49,10 @@ def main():
             cv2.putText(image, emotion, (5, 220), font, 1, (0, 255, 0), 2)
             recent_emotions.append(emotion)
             face_count += 1
-            if face_count > 5:
+            if face_count >= 5:
                 print get_mode_emotion(recent_emotions)
                 recent_emotions = []
                 face_count = 0
-
         else:
             cv2.putText(image, 'No Face Detected', (5, 220), font, 1, (255, 0, 0), 2)
 
