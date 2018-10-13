@@ -4,9 +4,6 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
 
-# Init face_cascade
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-
 # Setup camera
 camera = PiCamera()
 rawCapture = PiRGBArray(camera)
@@ -19,10 +16,13 @@ camera.capture(rawCapture, format="bgr")
 image = rawCapture.array
 
 # Convert image to grayscale
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Init face_cascade
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 # Detect faces in the image
-faces = faceCascade.detectMultiScale(gray, 1.3, 5)
+faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
 # largest_face = (0, 0, 0, 0)
 # for (x, y, w, h) in faces:
