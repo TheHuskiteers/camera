@@ -56,7 +56,7 @@ def find_faces(image):
     face_cascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
 
     # Detect faces in image
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    faces = face_cascade.detectMultiScale(image, 1.3, 5)
 
     # Return list of faces
     return faces
