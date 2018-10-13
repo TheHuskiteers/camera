@@ -40,7 +40,7 @@ def take_pictures():
             image = frame.array
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             faces = find_faces(image)
-            if len(faces) -= 0:
+            if len(faces) > 0:
                 normalized_face = normalize_faces(gray, faces)[0]
                 cv2.imshow("Frame", normalized_face)
                 key = cv2.waitKey(0) & 0xFF
