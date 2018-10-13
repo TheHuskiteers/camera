@@ -7,7 +7,7 @@ import time
 # Setup camera
 camera = PiCamera()
 camera.resolution = (640, 480)
-camera.framerate = 32
+camera.framerate = 16
 rawCapture = PiRGBArray(camera, size=(640, 480))
 
 # Let camera warmup
@@ -22,21 +22,23 @@ for frame in camera.capture_continuous(rawCapture, format='bgr', use_video_port=
     image = frame.array
 
     # Convert frame to grayscale
+    print "Converting frame to grayscale..."
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Detect faces in the frame
+    print "Detecting faces in frame..."
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
     # Take the first face and draw a square around it
     if len(faces) != 0:
+        print "Drawing rectangle around face"
         (x, y, w, h) = faces[0]
         cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
     
     # Show the frame
+    print "Displaying frame"
     cv2.imshow("Frame", image)
-
-    # Sleep a half second
-    time.sleep(0.5)
-
-    # Clear the stream in prep for next frame
-    rawCapture.truncate(0)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+    
+cv2.destroyAllWindows()
