@@ -22,6 +22,9 @@ def main():
     # Setup camera
     (camera, cap) = setup_camera()
 
+    face_count = 0
+    recent_emotions = []
+
     # Capture frames from camera
     for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
         # Grab raw array representing the image
@@ -42,6 +45,13 @@ def main():
             emotion = get_emotion_from_face(normalized_faces[0])
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
             cv2.putText(image, emotion, (5, 220), font, 1, (0, 255, 0), 2)
+            recent_emotions.append(emotion)
+            face_count += 1
+            if face_count > 5:
+                print get_mode_emotion(recent_emotions)
+                recent_emotions = []
+                face_count = 0
+
         else:
             cv2.putText(image, 'No Face Detected', (5, 220), font, 1, (255, 0, 0), 2)
 
@@ -68,7 +78,6 @@ def setup_camera():
 
     return (camera, cap)
 
-
 def find_faces(image):
     # Detect faces in image
     faces = face_cascade.detectMultiScale(image, 1.3, 5)
@@ -87,6 +96,9 @@ def normalize_faces(image, faces):
 
 def get_emotion_from_face(face):
     return emotions[fisher_face.predict(face)[0]]
+
+def get_mode_emotion(recent_emotions):
+    return max(recent_emotions, key=recent_emotions.count)
 
 # Execute main() if run
 if __name__ == "__main__":
