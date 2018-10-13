@@ -1,31 +1,37 @@
 import cv2
-import sys
+import numpy as np
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import time
 
-imagePath = sys.argv[1]
-cascPath = sys.argv[2]
+# Init face_cascade
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-faceCascade = cv2.CascadeClassifier(cascPath)
+# Setup camera
+camera = PiCamera()
+rawCapture = PiRGBArray(camera)
 
-image = cv2.imread(imagePath)
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# Let camera warmup
+time.sleep(0.1)
+
+# Capture image from camera
+camera.capture(rawCapture, format="bgr")
+image = rawCapture.array
+
+# Convert image to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 # Detect faces in the image
-faces = faceCascade.detectMultiScale(
-    gray,
-    scaleFactor=1.1,
-    minNeighbors=5,
-    minSize=(30, 30),
-    flags = cv2.cv.CV_HAAR_SCALE_IMAGE
-)
+faces = faceCascade.detectMultiScale(gray, 1.3, 5)
 
-print "Found {0} faces!".format(len(faces))
+# largest_face = (0, 0, 0, 0)
+# for (x, y, w, h) in faces:
+#     if w * h > largest_face[2] * largest_face[3]:
+#         largest_face = (x, y, w, h)
 
-largest_face = (0, 0, 0, 0)
-for (x, y, w, h) in faces:
-    if w * h > largest_face[2] * largest_face[3]:
-        largest_face = (x, y, w, h)
-
-(x, y, w, h) = largest_face
+# Take the first face and draw a square around it
+(x, y, w, h) = faces[0]
 cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
 
+# Output image to file
 cv2.imwrite("output_faces.jpg", image)
