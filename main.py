@@ -52,7 +52,7 @@ def main():
                 print get_mode_emotion(recent_emotions)
                 recent_emotions = []
                 face_count = 0
-            cv2.imshow("Frame", cv2.cvtColor(cv2.resize(normalized_faces[0], (576, 416)), cvt.COLOR_GRAY2BGR))
+            cv2.imshow("Frame", cv2.cvtColor(cv2.resize(normalized_faces[0], (576, 416)), cv2.COLOR_GRAY2BGR))
         else:
             cv2.putText(image, 'No Face Detected', (5, 220), font, 1, (255, 0, 0), 2)
             cv2.imshow("Frame", cv2.resize(image, (576, 416)))      
