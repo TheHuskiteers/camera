@@ -20,11 +20,14 @@ def main():
         # Grab raw array representing the image
         image = frame.array
 
+        # Convert image to grayscale
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
         # Find faces in image
         faces = find_faces(image)
 
         # Normalize faces found
-        normalized_faces = normalize_faces(image, faces)
+        normalized_faces = normalize_faces(gray, faces)
 
         # Take the first face and draw a square around it
         if len(faces) != 0:
@@ -51,9 +54,6 @@ def main():
 def find_faces(image):
     # Init face_cascade
     face_cascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
-
-    # Convert image to grayscale
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Detect faces in image
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
