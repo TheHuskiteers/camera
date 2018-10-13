@@ -86,7 +86,7 @@ def normalize_faces(image, faces):
     return normalized_faces
 
 def get_emotion_from_face(face):
-    return emotion[fisher_face.predict(face)[0]]
+    return emotions[fisher_face.predict(face)[0]]
 
 # Execute main() if run
 if __name__ == "__main__":
