@@ -35,7 +35,8 @@ def main():
         # Take the first face and draw a square around it
         if len(faces) != 0:
             (x, y, w, h) = faces[0]
-            print "Emotion is: " emotions[get_emotion_from_face(normalized_faces[0])]
+            emotions_index = get_emotion_from_face(normalized_faces[0])
+            print "Emotion is: " emotions[emotions_index]
             cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
             cv2.putText(image, 'Face Detected', (5, 220), font, 1, (0, 255, 0), 2)
         else:
