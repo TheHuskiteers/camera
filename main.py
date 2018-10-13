@@ -57,11 +57,9 @@ def main():
                     print get_mode_emotion(recent_emotions)
                 recent_emotions = []
                 face_count = 0
-            image = cv2.resize(image, (576, 416))
-            cv2.imshow("Frame", image)
-        else:
-            cv2.putText(image, 'No Face Detected', (5, 220), font, 1, (255, 0, 0), 2)
-            cv2.imshow("Frame", cv2.resize(image, (576, 416)))      
+
+        image = cv2.resize(image, (576, 416))
+        cv2.imshow("Frame", image)
 
         # Exit on ESC
         if cv2.waitKey(1) == 27:
