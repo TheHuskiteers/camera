@@ -3,7 +3,6 @@ import numpy as np
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
-from multiprocessing import Pool
 
 # Define font to use for text
 font = cv2.FONT_HERSHEY_SIMPLEX
