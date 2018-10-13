@@ -20,8 +20,12 @@ faces = faceCascade.detectMultiScale(
 
 print "Found {0} faces!".format(len(faces))
 
-# Draw a rectangle around the faces
+largest_face = (0, 0, 0, 0)
 for (x, y, w, h) in faces:
-    cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    if w * h > largest_face[2] * largest_face[3]:
+        largest_face = (x, y, w, h)
+
+(x, y, w, h) = largest_face
+cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
 
 cv2.imwrite("output_faces.jpg", image)
