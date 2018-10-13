@@ -29,9 +29,11 @@ def take_pictures():
 
     for emotion in emotions:
         pictures_left = number_of_each
+        
         base_path = dataset_dir + emotion
         if not os.path.exists(base_path):
             os.makedirs(base_path)
+
         while pictures_left != 0:
             camera.capture(cap, format="bgr")
             image = cap.array
@@ -41,7 +43,7 @@ def take_pictures():
                 normalized_faces = normalize_faces(gray, faces)
                 cv2.imshow("Image", normalized_faces[0])
                 cv2.waitKey(0)
-                cap.truncate(0)
+            cap.truncate(0)
 
 # Setup camera
 def setup_camera():
