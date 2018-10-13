@@ -42,9 +42,9 @@ def take_pictures():
                 if len(faces) != 0:
                     normalized_face = normalize_faces(gray, faces)[0]
                     cv2.imshow("Frame", normalized_face)
-                    key = cv2.waitKey(1) & 0xFF
+                    key = cv2.waitKey(0) & 0xFF
                     if key == ord('y'):
-                        cv2.imwrite(base_path + '/' + pictures_left + '.png', normalized_face)
+                        cv2.imwrite(base_path + '/' + str(pictures_left) + '.png', normalized_face)
                         pictures_left -= 1
                 cap.truncate(0)
 
