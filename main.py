@@ -25,6 +25,7 @@ def main():
     # Count and list for determining mode of recent emotions
     face_count = 0
     recent_emotions = []
+    last_emotion = 'neutral'
 
     # Capture frames from camera
     for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
@@ -48,8 +49,10 @@ def main():
             cv2.putText(image, emotion, (5, 220), font, 1, (0, 255, 0), 2)
             recent_emotions.append(emotion)
             face_count += 1
-            if face_count >= 5:
-                print get_mode_emotion(recent_emotions)
+            if face_count >= 3:
+                mode = get_mode_emotion(recent_emotions)
+                if last_emotion != mode:
+                    print get_mode_emotion(recent_emotions)
                 recent_emotions = []
                 face_count = 0
             image = cv2.resize(image, (576, 416))
