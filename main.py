@@ -37,11 +37,11 @@ def main():
         # Find faces in image
         faces = find_faces(image)
 
-        # Normalize faces found
-        normalized_faces = normalize_faces(gray, faces)
-
         # Take the first face and draw a square around it
         if len(faces) != 0:
+            # Normalize faces found
+            normalized_faces = normalize_faces(gray, faces)
+            
             (x, y, w, h) = faces[0]
             emotion = get_emotion_from_face(normalized_faces[0])
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)

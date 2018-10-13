@@ -29,21 +29,24 @@ def take_pictures():
 
     for emotion in emotions:
         pictures_left = number_of_each
-        
+
         base_path = dataset_dir + emotion
         if not os.path.exists(base_path):
             os.makedirs(base_path)
 
         while pictures_left != 0:
-            camera.capture(cap, format="bgr")
-            image = cap.array
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            faces = find_faces(image)
-            if len(faces) != 0:
-                normalized_faces = normalize_faces(gray, faces)
-                cv2.imshow("Image", normalized_faces[0])
-                cv2.waitKey(0)
-            cap.truncate(0)
+            for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
+                image = frame.array
+                gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+                faces = find_faces(image)
+                if len(faces) != 0:
+                    normalized_face = normalize_faces(gray, faces)[0]
+                    cv2.imshow("Frame", normalized_face)
+                    key = cv2.waitKey(1) & 0xFF
+                    if key == ord('y'):
+                        cv2.imwrite(base_path + '/' + pictures_left + '.png', normalized_face)
+                        pictures_left -= 1
+
 
 # Setup camera
 def setup_camera():
