@@ -16,8 +16,8 @@ fisher_face = cv2.createFisherFaceRecognizer()
 fisher_face.load('models/emotion_detection_model.xml')
 
 # List of emotions current model is trained for
-#emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
-emotions = ['happy', 'angry', 'sadness', 'happy', 'sadness', 'happy']
+emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
+#emotions = ['happy', 'angry', 'sadness', 'happy', 'sadness', 'happy']
 
 def main():
     # Setup camera
