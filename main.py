@@ -41,7 +41,7 @@ def main():
         if len(faces) != 0:
             # Normalize faces found
             normalized_faces = normalize_faces(gray, faces)
-            
+
             (x, y, w, h) = faces[0]
             emotion = get_emotion_from_face(normalized_faces[0])
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
@@ -52,11 +52,10 @@ def main():
                 print get_mode_emotion(recent_emotions)
                 recent_emotions = []
                 face_count = 0
+            cv2.imshow("Frame", cv2.resize(normalized_faces[0], (576, 416)))
         else:
             cv2.putText(image, 'No Face Detected', (5, 220), font, 1, (255, 0, 0), 2)
-
-        # Show the frame
-        cv2.imshow("Frame", cv2.resize(image, (576, 416)))
+            cv2.imshow("Frame", cv2.resize(image, (576, 416)))      
 
         # Exit on ESC
         if cv2.waitKey(1) == 27:
