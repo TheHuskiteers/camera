@@ -7,9 +7,9 @@ import time
 def main():
     # Setup camera
     camera = PiCamera()
-    camera.resolution = (320, 220)
+    camera.resolution = (320, 224)
     camera.framerate = 32
-    cap = PiRGBArray(camera, size=(320, 220))
+    cap = PiRGBArray(camera, size=(320, 224))
     time.sleep(0.1)
 
     # Define font to use for text
@@ -62,8 +62,12 @@ def find_faces(image):
     return faces
 
 def normalize_faces(image, faces):
-    cutted_faces = [image[y:y + h, x:x + w] for (x, y, w, h) in faces]
-    normalized_faces = [cv2.resize(face, (100, 100)) for face in cutted_faces]
+    # Cut faces from image
+    cutted_faces = [image[f[1]:f[1] + f[3], f[0]:f[0] + f[2]] for f in faces]
+
+    # Resize
+    normalized_faces = [cv2.resize(f, (100, 100)) for f in cutted_faces]
+
     return normalized_faces
 
 def get_emotion_from_face(face):
