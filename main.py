@@ -24,7 +24,7 @@ def main():
         faces = find_faces(image)
 
         # Normalize faces found
-        normalized_faces = normalize_faces(faces)
+        normalized_faces = normalize_faces(faces, image)
 
         # Take the first face and draw a square around it
         if len(faces) != 0:
