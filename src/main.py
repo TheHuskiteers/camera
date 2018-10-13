@@ -6,9 +6,9 @@ import time
 
 # Setup camera
 camera = PiCamera()
-camera.resolution = (640, 480)
+camera.resolution = (320, 220)
 camera.framerate = 32
-rawCapture = PiRGBArray(camera, size=(640, 480))
+rawCapture = PiRGBArray(camera, size=(320, 220))
 
 # Let camera warmup
 time.sleep(0.1)
