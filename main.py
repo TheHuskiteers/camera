@@ -80,7 +80,7 @@ def setup_camera():
 
 def find_faces(image):
     # Detect faces in image
-    faces = face_cascade.detectMultiScale(image, 1.3, 5)
+    faces = face_cascade.detectMultiScale(image, 1.3, 3)
 
     # Return list of faces
     return faces
