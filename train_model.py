@@ -37,9 +37,10 @@ def take_pictures():
             image = cap.array
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             faces = find_faces(image)
-            normalized_faces = normalize_faces(gray, faces)
-            cv2.imshow("Image", normalized_faces[0])
-            cv2.waitKey(0)
+            if len(faces) != 0:
+                normalized_faces = normalize_faces(gray, faces)
+                cv2.imshow("Image", normalized_faces[0])
+                cv2.waitKey(0)
 
 # Setup camera
 def setup_camera():
