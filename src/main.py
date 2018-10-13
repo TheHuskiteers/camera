@@ -4,44 +4,44 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
 
-# Setup camera
-camera = PiCamera()
-camera.resolution = (320, 220)
-camera.framerate = 32
-rawCapture = PiRGBArray(camera, size=(320, 220))
+def main():
+    # Setup camera
+    camera = PiCamera()
+    camera.resolution = (320, 220)
+    camera.framerate = 32
+    cap = PiRGBArray(camera, size=(320, 220))
+    time.sleep(0.1)
 
-# Let camera warmup
-time.sleep(0.1)
+    # Init face_cascade
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-# Init face_cascade
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    # Capture frames from camera
+    for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
+        # Grab raw array representing the image
+        image = frame.array
 
-# Capture frames from camera
-for frame in camera.capture_continuous(rawCapture, format='bgr', use_video_port=True):
-    # Grab raw array representing the image
-    image = frame.array
+        # Convert frame to grayscale
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # Convert frame to grayscale
-    print "Converting frame to grayscale..."
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # Detect faces in the frame
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-    # Detect faces in the frame
-    print "Detecting faces in frame..."
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        # Take the first face and draw a square around it
+        if len(faces) != 0:
+            (x, y, w, h) = faces[0]
+            cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
+        
+        # Show the frame
+        print "Displaying frame"
+        cv2.imshow("Frame", image)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+        
+        # Clear stream in prep for next frame
+        cap.truncate(0)
 
-    # Take the first face and draw a square around it
-    if len(faces) != 0:
-        print "Drawing rectangle around face"
-        (x, y, w, h) = faces[0]
-        cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
-    
-    # Show the frame
-    print "Displaying frame"
-    cv2.imshow("Frame", image)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-    
-    # Clear stream in prep for next frame
-    rawCapture.truncate(0)
-    
-cv2.destroyAllWindows()
+    # Cleanup windows when done
+    cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()
