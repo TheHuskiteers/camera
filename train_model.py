@@ -46,6 +46,7 @@ def take_pictures():
                     if key == ord('y'):
                         cv2.imwrite(base_path + '/' + str(pictures_left) + '.png', normalized_face)
                         pictures_left -= 1
+                        time.sleep(1)
                 cap.truncate(0)
 
 
