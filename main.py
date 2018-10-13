@@ -52,6 +52,7 @@ def main():
             if face_count >= 3:
                 mode = get_mode_emotion(recent_emotions)
                 if last_emotion != mode:
+                    last_emotion = mode
                     print get_mode_emotion(recent_emotions)
                 recent_emotions = []
                 face_count = 0
