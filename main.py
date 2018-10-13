@@ -47,7 +47,6 @@ def main():
             (x, y, w, h) = faces[0]
             emotion = get_emotion_from_face(normalized_faces[0])
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            cv2.putText(image, last_emotion, (5, 220), font, 1, (0, 255, 0), 2)
             recent_emotions.append(emotion)
             face_count += 1
             if face_count >= 10:
@@ -58,6 +57,7 @@ def main():
                 recent_emotions = []
                 face_count = 0
 
+        cv2.putText(image, last_emotion, (5, 220), font, 1, (0, 255, 0), 2)
         image = cv2.resize(image, (576, 416))
         cv2.imshow("Frame", image)
 
