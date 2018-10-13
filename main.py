@@ -15,6 +15,9 @@ def main():
     # Define font to use for text
     font = cv2.FONT_HERSHEY_SIMPLEX
 
+    # List of emotions current model is trained for
+    emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
+
     # Capture frames from camera
     for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
         # Grab raw array representing the image
@@ -32,7 +35,7 @@ def main():
         # Take the first face and draw a square around it
         if len(faces) != 0:
             (x, y, w, h) = faces[0]
-            print get_emotion_from_face(normalized_faces[0])
+            print "Emotion is": emotions[get_emotion_from_face(normalized_faces[0])]
             cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
             cv2.putText(image, 'Face Detected', (5, 220), font, 1, (0, 255, 0), 2)
         else:
