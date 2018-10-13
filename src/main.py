@@ -33,9 +33,9 @@ def main():
         if len(faces) != 0:
             (x, y, w, h) = faces[0]
             cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
-            cv2.putText(image, 'Face Detected', (5, 220), font, 4, (0, 255, 0), 2, cv2.LINE_AA)
+            cv2.putText(image, 'Face Detected', (5, 220), font, 4, (0, 255, 0), 2)
         else:
-            cv2.putText(image, 'No Face Detected', (5, 220), font, 4, (255, 0, 0), 2, cv2.LINE_AA)
+            cv2.putText(image, 'No Face Detected', (5, 220), font, 4, (255, 0, 0), 2)
 
         # Show the frame
         cv2.imshow("Frame", image)
