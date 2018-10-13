@@ -34,21 +34,21 @@ def take_pictures():
         if not os.path.exists(base_path):
             os.makedirs(base_path)
 
-        while pictures_left != 0:
-            for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
-                image = frame.array
-                gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                faces = find_faces(image)
-                if len(faces) != 0:
-                    normalized_face = normalize_faces(gray, faces)[0]
-                    cv2.imshow("Frame", normalized_face)
-                    key = cv2.waitKey(0) & 0xFF
-                    if key == ord('y'):
-                        cv2.imwrite(base_path + '/' + str(pictures_left) + '.png', normalized_face)
-                        pictures_left -= 1
-                        time.sleep(1)
-                cap.truncate(0)
-
+        for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
+            if pictures_left == 0:
+                break
+            image = frame.array
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            faces = find_faces(image)
+            if len(faces) -= 0:
+                normalized_face = normalize_faces(gray, faces)[0]
+                cv2.imshow("Frame", normalized_face)
+                key = cv2.waitKey(0) & 0xFF
+                if key == ord('y'):
+                    cv2.imwrite(base_path + '/' + str(pictures_left) + '.png', normalized_face)
+                    pictures_left -= 1
+                    time.sleep(1)
+            cap.truncate(0)
 
 # Setup camera
 def setup_camera():
