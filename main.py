@@ -105,7 +105,7 @@ def get_mode_emotion(recent_emotions):
     return max(recent_emotions, key=recent_emotions.count)
 
 def write_emotion(emotion):
-    f = open('~/.emotion', 'w')
+    f = open(os.path.expanduser('~/.emotion'), 'w')
     f.write(emotion)
     f.close()
 
