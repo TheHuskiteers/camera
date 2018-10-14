@@ -3,6 +3,7 @@ import numpy as np
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
+import os
 
 # Define font to use for text
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -26,7 +27,7 @@ def main():
     face_count = 0
     recent_emotions = []
     last_emotion = 'neutral'
-    print last_emotion
+    os.environ["EMOTION"] = last_emotion
 
     # Capture frames from camera
     for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
@@ -53,7 +54,7 @@ def main():
                 mode = get_mode_emotion(recent_emotions)
                 if last_emotion != mode:
                     last_emotion = mode
-                    print get_mode_emotion(recent_emotions)
+                    os.environ["EMOTION"] = last_emotion
                 recent_emotions = []
                 face_count = 0
 
