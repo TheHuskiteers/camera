@@ -1,9 +1,12 @@
-import cv2
-import numpy as np
-from picamera.array import PiRGBArray
-from picamera import PiCamera
+#!/usr/bin/env python2.7
+
 import time
 import os
+import cv2
+import numpy as np
+
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 
 # Define font to use for text
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -25,6 +28,8 @@ def main():
     # Count and list for determining mode of recent emotions
     face_count = 0
     recent_emotions = []
+
+    # Write initial neutral emotion to `~/.emotion`
     last_emotion = 'neutral'
     write_emotion(last_emotion)
 
@@ -41,24 +46,43 @@ def main():
 
         # Take the first face and draw a square around it
         if len(faces) != 0:
+            # Increment number of faces found
+            face_count += 1
+
+            # Draw a green rectangle around first face found
+            (x, y, w, h) = faces[0]
+            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
             # Normalize faces found
             normalized_faces = normalize_faces(gray, faces)
 
-            (x, y, w, h) = faces[0]
+            # Get emotion from first face found
             emotion = get_emotion_from_face(normalized_faces[0])
-            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+            # Append that emotion to recent_emotions
             recent_emotions.append(emotion)
-            face_count += 1
+
+            # Determine if average emotion has changed over 10-face interval
             if face_count >= 10:
+                # Get mode of recent_emotions
                 mode = get_mode_emotion(recent_emotions)
+
+                # Detect if mode has changed
                 if last_emotion != mode:
                     last_emotion = mode
                     write_emotion(last_emotion)
+                
+                # Reset recent_emotions and face_count
                 recent_emotions = []
                 face_count = 0
 
+        # Write last_emotion to bottom left of frame
         cv2.putText(image, last_emotion, (5, 220), font, 1, (0, 255, 0), 2)
+
+        # Make sure frame is full-screen
         image = cv2.resize(image, (576, 416))
+
+        # Display frame
         cv2.imshow("Frame", image)
 
         # Exit on ESC
@@ -73,41 +97,43 @@ def main():
 
 # Setup camera
 def setup_camera():
+    res = (320, 224)
     camera = PiCamera()
-    camera.resolution = (320, 224)
+    camera.resolution = res
     camera.framerate = 32
-    cap = PiRGBArray(camera, size=(320, 224))
+    cap = PiRGBArray(camera, size=res)
     time.sleep(0.1)
 
     return (camera, cap)
 
+# Find all the faces in an image
 def find_faces(image):
-    # Detect faces in image
-    faces = face_cascade.detectMultiScale(image, 1.3, 3)
+    return face_cascade.detectMultiScale(image, 1.3, 3)
 
-    # Return list of faces
-    return faces
-
+# Normalize faces (cut them out and resize)
 def normalize_faces(image, faces):
     # Cut faces from image
-    cutted_faces = [image[y:y+h, x:x+w] for (x, y, w, h) in faces]
+    cut_faces = [image[y:y+h, x:x+w] for (x, y, w, h) in faces]
 
     # Resize
     normalized_faces = [cv2.resize(f, (350, 350)) for f in cutted_faces]
 
     return normalized_faces
 
+# Return prediction of face
 def get_emotion_from_face(face):
     return emotions[fisher_face.predict(face)[0]]
 
+# Return the most common emotion in recent_emotions
 def get_mode_emotion(recent_emotions):
     return max(recent_emotions, key=recent_emotions.count)
 
+# Write given emotion to `~/.emotion`
 def write_emotion(emotion):
     f = open(os.path.expanduser('~/.emotion'), 'w')
     f.write(emotion)
     f.close()
 
-# Execute main() if run
+# Execute main() if executed
 if __name__ == "__main__":
     main()
