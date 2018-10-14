@@ -116,7 +116,7 @@ def normalize_faces(image, faces):
     cut_faces = [image[y:y+h, x:x+w] for (x, y, w, h) in faces]
 
     # Resize
-    normalized_faces = [cv2.resize(f, (350, 350)) for f in cutted_faces]
+    normalized_faces = [cv2.resize(f, (350, 350)) for f in cut_faces]
 
     return normalized_faces
 
