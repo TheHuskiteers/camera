@@ -27,7 +27,7 @@ def main():
     face_count = 0
     recent_emotions = []
     last_emotion = 'neutral'
-    os.environ["EMOTION"] = last_emotion
+    write_emotion(last_emotion)
 
     # Capture frames from camera
     for frame in camera.capture_continuous(cap, format='bgr', use_video_port=True):
@@ -54,7 +54,7 @@ def main():
                 mode = get_mode_emotion(recent_emotions)
                 if last_emotion != mode:
                     last_emotion = mode
-                    os.environ["EMOTION"] = last_emotion
+                    write_emotion(last_emotion)
                 recent_emotions = []
                 face_count = 0
 
@@ -103,6 +103,11 @@ def get_emotion_from_face(face):
 
 def get_mode_emotion(recent_emotions):
     return max(recent_emotions, key=recent_emotions.count)
+
+def write_emotion(emotion):
+    f = open('~/.emotion', 'w')
+    f.write(emotion)
+    f.close()
 
 # Execute main() if run
 if __name__ == "__main__":
